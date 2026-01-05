@@ -1,0 +1,29 @@
+# Visual Studio
+.vs/
+
+# Rider/JetBrains
+.idea/
+
+# User-specific VS files
+*.csproj.user
+
+# .NET build output
+**/bin/
+**/obj/
+
+# Node
+**/node_modules/
+**/dist/
+**/build/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
