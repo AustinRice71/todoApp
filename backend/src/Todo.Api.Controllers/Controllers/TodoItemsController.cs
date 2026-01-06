@@ -7,6 +7,8 @@ using Todo.Domain;
 /// <summary>
 /// Controller for managing TodoItem entities.
 /// </summary>
+[ApiController]
+[Route("api/[controller]")]
 public class TodoItemsController : ControllerBase
 {
     /// <summary>
