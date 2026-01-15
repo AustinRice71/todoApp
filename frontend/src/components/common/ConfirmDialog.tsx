@@ -1,3 +1,7 @@
+/**
+ * A reusable confirmation dialog component.
+ */
+
 type Props = {
   open: boolean; // should the dialog be visible?
   title: string; // message to show

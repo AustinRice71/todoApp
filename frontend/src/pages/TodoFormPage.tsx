@@ -5,8 +5,8 @@ import { getGroups } from "../api/groups";
 import { createTodo, getTodo, updateTodo } from "../api/todos";
 import type { TodoPriority } from "../types/todo";
 
+// Props for the TodoFormPage component. Dictates whether we're creating or editing a todo.
 type TodoFormMode = "create" | "edit";
-
 type TodoFormPageProps = {
   mode: TodoFormMode;
 };
@@ -14,7 +14,6 @@ type TodoFormPageProps = {
 export default function TodoFormPage({ mode }: TodoFormPageProps) {
 
   const navigate = useNavigate();
-
   const params = useParams();
 
   // Get the Id in the event we're in edit mode.
@@ -36,7 +35,7 @@ export default function TodoFormPage({ mode }: TodoFormPageProps) {
   });
 
   /**
-   * Form state
+   * Form state. Set up state variables for each form field.
    */
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState<string>("");

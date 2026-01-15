@@ -2,6 +2,11 @@ import { api } from "./client";
 import type { Group } from "../types/group";
 
 /**
+ * This file contains API functions related to groups. These functions interact
+ * with the backend to perform CRUD operations on group data.
+ */
+
+/**
  * Fetch all groups.
  * @returns A list of all groups.
  */

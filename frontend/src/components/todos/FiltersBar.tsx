@@ -1,12 +1,19 @@
 import type { TodoPriority } from "../../types/todo";
 
+/**
+ * Props:
+ * - priority: current priority filter value
+ * - showCompleted: whether to show completed todos
+ * - order: current sort order
+ * - onChangePriority: callback when priority filter changes
+ * - onChangeShowCompleted: callback when showCompleted changes
+ * - onChangeOrder: callback when sort order changes
+ */
 type Props = {
   // current UI values
   priority: "All" | TodoPriority;
   showCompleted: boolean;
   order: "asc" | "desc";
-
-  // callbacks for when user changes them
   onChangePriority: (value: "All" | TodoPriority) => void;
   onChangeShowCompleted: (value: boolean) => void;
   onChangeOrder: (value: "asc" | "desc") => void;

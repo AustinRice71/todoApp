@@ -1,6 +1,11 @@
 import { api } from "./client";
 import type { TodoItem, TodoPriority } from "../types/todo";
 
+/**
+ * This file contains API functions related to todo items. These functions interact
+ * with the backend to perform CRUD operations on todo data.
+ */
+
 // Define the shape of the query parameters for fetching todos
 export type TodosQuery = {
   priority?: TodoPriority | "All";
@@ -44,6 +49,15 @@ export async function createTodo(payload: Omit<TodoItem, "id">): Promise<TodoIte
  */
 export async function updateTodo(id: number, payload: Omit<TodoItem, "id">): Promise<void> {
   await api.put(`/todoitems/${id}`, payload);
+}
+
+/**
+ * Toggle the completed status of a todo item.
+ * @param id 
+ * @param completed 
+ */
+export async function toggleCompleteTodo(id: number, completed: boolean): Promise<void> {
+  await api.patch(`/todoitems/${id}/togglecomplete`, { isCompleted: completed });
 }
 
 /**

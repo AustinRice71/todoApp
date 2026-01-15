@@ -41,7 +41,9 @@ public class TodoItemsController : ControllerBase
                 Description = i.Description,
                 Completed = i.Completed,
                 DueDate = i.DueDate,
-                Priority = i.Priority
+                Priority = i.Priority,
+                GroupId = i.GroupId,
+                Id = i.Id
             })
             .ToListAsync();
 
@@ -65,7 +67,9 @@ public class TodoItemsController : ControllerBase
                 Description = i.Description,
                 Completed = i.Completed,
                 DueDate = i.DueDate,
-                Priority = i.Priority
+                Priority = i.Priority,
+                GroupId = i.GroupId,
+                Id = i.Id
             })
             .FirstOrDefaultAsync();
 
@@ -137,6 +141,17 @@ public class TodoItemsController : ControllerBase
         todoItem.DueDate = dto.DueDate;
         todoItem.Priority = dto.Priority;
         todoItem.Completed = dto.Completed;
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/togglecomplete")]
+    public async Task<ActionResult> ToggleComplete(int id)
+    {
+        var todoItem = await _context.TodoItems.FindAsync(id);
+        if (todoItem is null) return NotFound();
+
+        todoItem.Completed = !todoItem.Completed;
         await _context.SaveChangesAsync();
         return NoContent();
     }
