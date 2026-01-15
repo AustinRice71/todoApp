@@ -9,7 +9,7 @@ using Todo.Domain;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class TodoListsController : ControllerBase
+public class GroupsController : ControllerBase
 {
     /// <summary>
     /// The database context for accessing Todo data.
@@ -17,10 +17,10 @@ public class TodoListsController : ControllerBase
     private readonly AppDbContext _context;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TodoListsController"/> class with database context injection.
+    /// Initializes a new instance of the <see cref="GroupsController"/> class with database context injection.
     /// </summary>
     /// <param name="context">The database context for accessing Todo data.</param>
-    public TodoListsController(AppDbContext context)
+    public GroupsController(AppDbContext context)
     {
         _context = context;
     }
@@ -37,7 +37,8 @@ public class TodoListsController : ControllerBase
             .OrderBy(l => l.Name)
             .Select(l => new GroupDto
             {
-                Name = l.Name
+                Name = l.Name,
+                Id = l.Id
             })
             .ToListAsync();
 
@@ -57,7 +58,8 @@ public class TodoListsController : ControllerBase
             .Where(l => l.Id == id)
             .Select(l => new GroupDto
             {
-                Name = l.Name
+                Name = l.Name,
+                Id = l.Id
 
             })
             .SingleOrDefaultAsync();
