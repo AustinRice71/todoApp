@@ -37,7 +37,8 @@ public class GroupsController : ControllerBase
             .OrderBy(l => l.Name)
             .Select(l => new GroupDto
             {
-                Name = l.Name
+                Name = l.Name,
+                Id = l.Id
             })
             .ToListAsync();
 
@@ -57,7 +58,8 @@ public class GroupsController : ControllerBase
             .Where(l => l.Id == id)
             .Select(l => new GroupDto
             {
-                Name = l.Name
+                Name = l.Name,
+                Id = l.Id
 
             })
             .SingleOrDefaultAsync();

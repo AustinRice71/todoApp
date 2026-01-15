@@ -83,7 +83,7 @@ public class TodoItemsController : ControllerBase
     /// <param name="dto">The DTO containing the details of the TodoItem to create.</param>
     /// <returns>The created TodoItem DTO.</returns>
     [HttpPost]
-    public async Task<ActionResult<TodoItemDto>> CreateTodoItem(CreateTodoItemDto dto)
+    public async Task<ActionResult<TodoItemDto>> CreateTodoItem([FromBody] CreateTodoItemDto dto)
     {
         // Validate required fields.
         if (string.IsNullOrWhiteSpace(dto.Title))

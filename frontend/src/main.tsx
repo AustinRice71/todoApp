@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 // React Query setup for data fetching and caching.
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
-import "./App.css";
+import "./styles/App.css";
 
 // Create a single QueryClient instance for the whole app.
 // This manages caching, refetching, etc.

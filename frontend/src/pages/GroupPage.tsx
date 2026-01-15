@@ -1,18 +1,31 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getGroups } from "../api/groups";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getGroups, deleteGroup } from "../api/groups";
 import { getTodos } from "../api/todos";
-// import FiltersBar from "../components/FiltersBar";
-// import GroupSection from "../components/GroupSection";
-// import GroupDialog from "../components/GroupDialog";
-// import ConfirmDialog from "../components/ConfirmDialog";
+import FiltersBar from "../components/todos/FiltersBar";
+import GroupSection from "../components/groups/GroupSection";
+import GroupDialog from "../components/groups/GroupDialog";
+import ConfirmDialog from "../components/common/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
 
-export default function TodoListPage() {
+export default function GroupPage() {
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const groupsQuery = useQuery({ queryKey: ["groups"], queryFn: getGroups });
   const todosQuery = useQuery({ queryKey: ["todos"], queryFn: getTodos });
+
+  const deleteGroupMutation = useMutation({
+    mutationFn: (id: number) => deleteGroup(id),
+    onSuccess: async () => {
+      // refresh groups list
+      await queryClient.invalidateQueries({ queryKey: ["groups"] });
+
+      // if deleting a group also deletes its todos, refresh todos too
+      await queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
 
   const [priority, setPriority] = useState<"All" | "Low" | "Medium" | "High">(
     "All"
@@ -22,8 +35,9 @@ export default function TodoListPage() {
 
   const [groupDialog, setGroupDialog] = useState<{
     open: boolean;
-    editId?: string;
+    editId?: number;
   }>({ open: false });
+
   const [confirm, setConfirm] = useState<{
     open: boolean;
     title: string;
@@ -70,14 +84,14 @@ export default function TodoListPage() {
     <div className="page">
       <h1>TODO List</h1>
 
-      {/* <FiltersBar
+      <FiltersBar
         priority={priority}
         showCompleted={showCompleted}
         order={order}
         onChangePriority={setPriority}
         onChangeShowCompleted={setShowCompleted}
         onChangeOrder={setOrder}
-      /> */}
+      />
 
       <div className="toolbar">
         <button onClick={() => setGroupDialog({ open: true })}>
@@ -85,43 +99,45 @@ export default function TodoListPage() {
         </button>
       </div>
 
-      {/* {groups.map(g => (
+      {groups.map((g) => (
         <GroupSection
           key={g.id}
           group={g}
           todos={todosByGroup.get(g.id) ?? []}
-          onEditGroup={() => setGroupDialog({ open: true, editId: String(g.id) })}
+          onEditGroup={() => setGroupDialog({ open: true, editId: g.id })}
           onDeleteGroup={() =>
             setConfirm({
               open: true,
               title: `Delete group "${g.name}"? This may also delete its todos.`,
-              onYes: () => {
-                // you’ll wire delete mutation inside GroupSection or here
-              },
+              onYes: () => deleteGroupMutation.mutate(g.id),
             })
           }
         />
-      ))} */}
+      ))}
 
       <button className="fab" onClick={() => navigate("/todos/new")}>
         +
       </button>
 
-      {/* <GroupDialog
-        open={groupDialog.open}
-        editId={groupDialog.editId}
-        onClose={() => setGroupDialog({ open: false })}
-      /> */}
+      {
+        <GroupDialog
+          open={groupDialog.open}
+          editId={groupDialog.editId}
+          onClose={() => setGroupDialog({ open: false })}
+        />
+      }
 
-      {/* <ConfirmDialog
-        open={confirm.open}
-        title={confirm.title}
-        onNo={() => setConfirm({ open: false, title: "" })}
-        onYes={() => {
-          confirm.onYes?.();
-          setConfirm({ open: false, title: "" });
-        }}
-      /> */}
+      {
+        <ConfirmDialog
+          open={confirm.open}
+          title={confirm.title}
+          onNo={() => setConfirm({ open: false, title: "" })}
+          onYes={() => {
+            confirm.onYes?.();
+            setConfirm({ open: false, title: "" });
+          }}
+        />
+      }
     </div>
   );
 }
