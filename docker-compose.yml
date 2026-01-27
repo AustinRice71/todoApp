@@ -1,0 +1,38 @@
+services:
+  todosql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: todosql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - todosql_data:/var/opt/mssql
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/src/Todo.Api.Controllers/Dockerfile
+    container_name: todoapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # IMPORTANT: use todosql hostname, NOT localhost
+      - ConnectionStrings__Default=Server=todosql,1433;Database=TodoAppDb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;
+    depends_on:
+      - todosql
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: todofrontend
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+volumes:
+  todosql_data:
